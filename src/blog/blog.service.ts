@@ -32,7 +32,7 @@ export class BlogService {
     // u
     async editPost(postID, createPostDTO: CreatePostDTO): Promise<Post> {
         const editedPost = await this.postModel
-            .findByIdAndUpdate(postID, createPostDTO, { new: true });
+            .findByIdAndUpdate(postID, createPostDTO, { new: true, useFindAndModify: false });
         return editedPost;
     }
 
