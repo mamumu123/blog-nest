@@ -2,7 +2,7 @@ import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { BlogController } from './blog.controller';
 import { BlogService } from './blog.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BlogSchema } from './schemas/blog.schema';
+import { BlogSchema } from '../data/schemas/blog.schema';
 import { AuthMiddleware } from './auth.middleware';
 
 @Module({
