@@ -34,14 +34,14 @@ export class UserService {
         if (!username || !password) {
             return {
                 code: 400,
-                msg: '不能为空',
+                message: '不能为空',
             };
         }
         const user = await this.findOne(username);
         if (user) {
             return {
                 code: 400,
-                msg: '用户已存在',
+                message: '用户已存在',
             };
         }
         const salt = makeSalt(); // 制作密码盐

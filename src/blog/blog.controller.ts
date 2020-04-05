@@ -1,7 +1,8 @@
-import { Controller, Get, Res, HttpStatus, Param, NotFoundException, Post, Body, Query, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Res, HttpStatus, Param, NotFoundException, Post, Body, Query, Put, Delete, UseGuards } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreatePostDTO } from '../data/dto/create-post.dto';
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes';
+import { AuthGuard } from '@nestjs/passport';
 
 
 @Controller('blog')
@@ -12,23 +13,33 @@ export class BlogController {
     @Get('posts')
     async getPosts(@Res() res) {
         const posts = await this.blogService.getPosts();
-        return res.status(HttpStatus.OK).json(posts);
+        return res.status(HttpStatus.OK).json({
+            message: "get all articles",
+            data: posts,
+            code: 200
+        });
     }
 
     @Get('post/:postID')
     async getPost(@Res() res, @Param('postID', new ValidateObjectId()) postID) {
         const post = await this.blogService.getPost(postID);
         if (!post) throw new NotFoundException('Post does not exist!');
-        return res.status(HttpStatus.OK).json(post);
+        return res.status(HttpStatus.OK).json({
+            message: `get  article ${postID}`,
+            data: post,
+            code: 200
+        });
 
     }
 
+    @UseGuards(AuthGuard('jwt')) // 使用 'JWT' 进行验证
     @Post('/post')
     async addPost(@Res() res, @Body() createPostDTO: CreatePostDTO) {
         const newPost = await this.blogService.addPost(createPostDTO);
         return res.status(HttpStatus.OK).json({
             message: "Post has been submitted successfully!",
-            post: newPost
+            data: newPost,
+            code: 200
         })
     }
 
@@ -42,7 +53,8 @@ export class BlogController {
         if (!editedPost) throw new NotFoundException('Post does not exist!');
         return res.status(HttpStatus.OK).json({
             message: 'Post has been successfully updated',
-            post: editedPost
+            data: editedPost,
+            code: 200
         })
     }
 
@@ -53,7 +65,8 @@ export class BlogController {
         if (!deletedPost) throw new NotFoundException('Post does not exist!');
         return res.status(HttpStatus.OK).json({
             message: 'Post has been deleted!',
-            post: deletedPost
+            data: deletedPost,
+            code: 200
         })
     }
 
