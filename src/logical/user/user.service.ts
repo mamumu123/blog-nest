@@ -37,13 +37,13 @@ export class UserService {
                 msg: '不能为空',
             };
         }
-        // const user = await this.findOne(username);
-        // if (user) {
-        //     return {
-        //         code: 400,
-        //         msg: '用户已存在',
-        //     };
-        // }
+        const user = await this.findOne(username);
+        if (user) {
+            return {
+                code: 400,
+                msg: '用户已存在',
+            };
+        }
         const salt = makeSalt(); // 制作密码盐
         const hashPwd = encryptPassword(password, salt);  // 加密密码
         return await this.userModel({ ...requestBody, password: hashPwd, salt }).save()

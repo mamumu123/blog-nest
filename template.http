@@ -1,6 +1,6 @@
 
 @hostname = http://localhost
-@port = 3000
+@port = 7000
 @host = {{hostname}}:{{port}}
 @contentType = application/json
 
